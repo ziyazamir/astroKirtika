@@ -1,0 +1,205 @@
+@extends('layouts.adminLayout')
+
+@section('content')
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                @section('content')
+
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="addfeaturedmodal" tabindex="-1" role="dialog"
+                        aria-labelledby="addfeaturedmodalTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Add Featured Astrologers </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{{ route('featured.store') }}" method="post">
+                                        @csrf
+                                        <select required class="custom-select" name="id" id="addastro">
+                                            @foreach ($unfastro as $us)
+                                                <option value="{{ $us->id }}">{{ $us->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                {{-- <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                </div> --}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Recently Added Astrologers</h3>
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                data-target="#addfeaturedmodal">
+                                Add Featured Astrologer
+                            </button>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="table-responsive">
+                            <div class="card-body">
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Name</th>
+                                            <th>Make Unfeatured</th>
+                                            {{-- <th>Rating</th>
+                                            <th>Review</th> --}}
+                                            {{-- <th>Fees</th>
+                                            <th>Total Experience</th>
+                                            <th>Languages</th>
+                                          
+                                            <th>Membership</th>
+                                            <th>Status</th>
+                                            <th>Details</th> --}}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($astro as $key => $us)
+                                            <tr>
+                                                <td>{{ $key + 1 }}</td>
+                                                <td>{{ $us->name }}</td>
+                                                {{-- <td>{{ $astro[$key]->name }}</td>
+                                                <td>{{ $us->rating }}</td>
+                                                <td>{{ $us->review }}</td> --}}
+                                                {{-- <td>{{ $astrologer->fees }}</td>
+                                                <td>{{ $astrologer->total_experience }}</td>
+                                                <td>{{ $astrologer->languages }}</td>
+                                                
+                                                <td>{{ $astrologer->title }}</td>
+                                                <td><button id="toggleButton" class="btn btn-success"
+                                                        data-item-id="{{ $astrologer->id }}"
+                                                        data-status="{{ $astrologer->status }}">
+                                                        {{ $astrologer->status == 'active' ? 'Active' : 'Inactive' }}
+                                                    </button></td> --}}
+                                                <td>
+                                                    <a href="{{ url('/astrologer/featured/delete/' . $us->id) }}"
+                                                        class="btn btn-primary bg-danger">Delete</a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>User Name</th>
+                                            <th>Make Unfeatured</th>
+                                            {{-- <th>Astrologer Name</th>
+                                            <th>Rating</th>
+                                            <th>Review</th> --}}
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                @endsection
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="../../plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables  & Plugins -->
+<script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="../../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="../../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="../../plugins/jszip/jszip.min.js"></script>
+<script src="../../plugins/pdfmake/pdfmake.min.js"></script>
+<script src="../../plugins/pdfmake/vfs_fonts.js"></script>
+<script src="../../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="../../plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="../../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+
+
+
+
+
+
+<script>
+    $(document).ready(function() {
+        $('#example1').DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": true,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true,
+            "responsive": true,
+        });
+    });
+
+    // $(document).ready(function() {
+
+    // $("#example1").dataTable({
+    //     "bProcessing": true,
+    //     "lengthMenu": [[10, 25, 50,100, 400,500,1000,1500], [10, 25, 50,100,400,500,1000,1500]],
+    //     dom: 'Blfrtip',
+    //     buttons: [
+    //       'csv','excel'
+    //     ]
+    //   });
+    //     });
+</script>
+<script>
+    $(document).ready(function() {
+        $('#toggleButton').click(function() {
+            var itemId = $(this).data('item-id');
+            var currentStatus = $(this).data('status');
+            var newStatus = (currentStatus === 'active') ? 'inactive' : 'active';
+            console.log(itemId);
+            $.ajax({
+                url: '{{ route('update.status.astro') }}',
+                type: 'POST',
+                data: {
+                    item_id: itemId,
+                    status: newStatus,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $('#toggleButton').text(newStatus === 'active' ? 'Active' :
+                            'Inactive').toggleClass('btn-success btn-secondary');
+                        $('#toggleButton').data('status', newStatus);
+                        alert("Status changed");
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
